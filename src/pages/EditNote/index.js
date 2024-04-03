@@ -1,49 +1,39 @@
-import { nanoid } from "nanoid";
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
+export default function EditNoteDialog({ open, onClose, id }) {
+    const notes = JSON.parse(localStorage.getItem("notes"));
 
-export default function AddNoteDialog({ open, onClose}) {
-    const [title, setTitle] = useState("");
-    const [content, setContent] = useState("");
-    const [category, setCategory] = useState("None")
+    const selectedNote = notes.find((p) => p.id === id);
+
+    const [title, setTitle] = useState(selectedNote ? selectedNote.name : "");
+    const [content, setContent] = useState(selectedNote ? selectedNote.content : "");
+    const [category, setCategory] = useState(selectedNote ? selectedNote.category : "");
+
     let categories = JSON.parse(localStorage.getItem("category"));
     if (!categories) categories = [];
-    const characterLimit = 100
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        let stringNotes = localStorage.getItem("notes");
-        let notes = JSON.parse(stringNotes)
 
-        
-
-        if (!notes) notes = []
-
-        notes.push({
-            id: nanoid(),
+    const updateNote = () => {
+        const updatedNote = {
+            id: selectedNote.id,
             name: title,
             content: content,
             category: category,
-        })
+        };
 
-        let convertedNotes = JSON.stringify(notes)
-        localStorage.setItem("notes", convertedNotes)
+        const updatedNotes = notes.map((note) => (note.id === id ? updatedNote : note));
 
-        onClose()
+        // Update local storage with the modified notes array
+        localStorage.setItem("notes", JSON.stringify(updatedNotes));
+
+        onClose(); // Close the dialog
         window.location.reload();
-
-        setTitle("");
-        setContent("");
-        setCategory("");
-
-        
-
     };
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle style={{ fontWeight: 'bold', borderBottom: '2px solid black', marginBottom: '8px' }}>Add New Note</DialogTitle>
+            <DialogTitle style={{ fontWeight: 'bold', borderBottom: '2px solid black', marginBottom: '8px' }}>Edit Note</DialogTitle>
             <DialogContent>
                 <TextField
                     margin="dense"
@@ -65,10 +55,7 @@ export default function AddNoteDialog({ open, onClose}) {
                     rows={4}
                     name="content"
                     value={content}
-                    inputProps={{ maxLength : 101 }}
                     onChange={(e) => setContent(e.target.value)}
-                    helperText={content.length > characterLimit ? "Exceeded character limit!" : `${characterLimit - content.length} Remaining`}
-                    error={content.length > characterLimit}
                 />
                 <FormControl fullWidth>
                     <InputLabel id="category-label">Category</InputLabel>
@@ -78,7 +65,6 @@ export default function AddNoteDialog({ open, onClose}) {
                         name="category"
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
-                        required
                     >
                         {categories.map((category) => (
                       <MenuItem value={category.id}>{category.label}</MenuItem>
@@ -90,11 +76,10 @@ export default function AddNoteDialog({ open, onClose}) {
                 <Button onClick={onClose} color="error" variant="contained">
                     Cancel
                 </Button>
-                <Button onClick={handleSubmit} color="primary" variant="contained" disabled={content.length === 0 || content.length > 100}>
-                    Add
+                <Button onClick={updateNote} color="primary" variant="contained">
+                    Save
                 </Button>
             </DialogActions>
         </Dialog>
     );
-}
-
+};
