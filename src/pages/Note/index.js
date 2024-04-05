@@ -56,8 +56,8 @@ export default function Note({ note, onDelete }) {
   };
 
   return (
-    <Box component="span" sx={{ display: 'inline-block', transform: 'scale(0.9)' }}>
-      <Card sx={{ width: 350, height: '200px', borderRadius: 1, marginTop: '60px', backgroundColor: '#EEEEEE' }} onClick={handleOpenEditDialog}>
+    <Box component="span" sx={{ display: 'inline-block', margin: '10px'}}>
+      <Card sx={{ width: 350, height: '200px', borderRadius: 1, backgroundColor: '#EEEEEE' }} onClick={handleOpenEditDialog}>
         <CardContent>
           <Grid container alignItems="center">
             <Grid item sx={{ flexGrow: 1 }}>
@@ -81,7 +81,7 @@ export default function Note({ note, onDelete }) {
           </Typography>
         </CardContent>
       </Card>
-      <DeleteConfirmationDialog open={openDialog} onClose={handleCloseDialog} onConfirm={handleConfirmDelete} />
+      <DeleteConfirmationDialog open={openDialog} onClose={handleCloseDialog} onConfirm={handleConfirmDelete} note={note}  />
       <EditNoteDialog open={openEditDialog} onClose={handleCloseEditDialog} id={note.id} onSave={handleEditNote} />
     </Box>
   );

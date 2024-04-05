@@ -13,7 +13,7 @@ import List from '@mui/material/List';
 import { Link, useNavigate} from 'react-router-dom';
 import Divider from '@mui/material/Divider';
 
-export default function AppBars() {
+export default function AppBars({ setKeyword}) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
@@ -23,6 +23,7 @@ export default function AppBars() {
     let categories = JSON.parse(localStorage.getItem("category"));
     if (!categories) categories = [];
     
+
     const DrawerList = (
         <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
           <List>
@@ -39,6 +40,7 @@ export default function AppBars() {
             </List>
         </Box>
     )
+
 
     const handleCategoryClick = (categoryId) => {
         // Redirect to the route with the category ID
@@ -70,15 +72,17 @@ export default function AppBars() {
                     <SearchIcon />
                 </IconButton>
                 <Box sx={{ marginLeft: 1 }}>
-                    <TextField
-                        placeholder='Search your note...'
-                        variant="outlined"
-                        size="small"
-                        // value={keyword}
-                        sx={{
-                            borderRadius: '8px',
-                            backgroundColor: '#FFFFFF',
+                        <TextField
+                            placeholder='Search your note...'
+                            variant="outlined"
+                            size="small"
+                            // value={keyword}
+                            sx={{
+                                borderRadius: '8px',
+                                backgroundColor: '#FFFFFF',
                             }}
+                            onChange={(event) => setKeyword(event.target.value)}
+                            
                     />
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
