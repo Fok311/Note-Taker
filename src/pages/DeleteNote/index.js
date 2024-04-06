@@ -1,7 +1,11 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
+import DeleteMessage from '../DeleteMessage';
+import { useState } from 'react';
 
-export default function DeleteConfirmationDialog({ open, onClose, onConfirm, note}) {
+export default function DeleteConfirmationDialog({ open, onClose, onConfirm, note }) {
+  
+  const [showDeleteMessage, setShowDeleteMessage] = useState(false);
 
   const handleConfirm = () => {
     // 1. Get the note id from the note prop
@@ -21,11 +25,18 @@ export default function DeleteConfirmationDialog({ open, onClose, onConfirm, not
 
     // 6. Call the onDelete function passed from Note component with updated notes
     onConfirm(newNotes);
+    setShowDeleteMessage(true);
 
+    
+  };
+
+  const handleCloseDeleteMessage = () => {
+    setShowDeleteMessage(false); // Close delete message dialog
     window.location.reload();
   };
 
   return (
+    <>
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Delete Note</DialogTitle>
       <DialogContent>
@@ -36,6 +47,8 @@ export default function DeleteConfirmationDialog({ open, onClose, onConfirm, not
         <Button onClick={handleConfirm} color="error">Delete</Button>
       </DialogActions>
     </Dialog>
+      <DeleteMessage open={showDeleteMessage} onClose={handleCloseDeleteMessage} />
+    </>
   );
 }
 

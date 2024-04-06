@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, Typography, Grid, IconButton } from '@mui/material';
 import Box from '@mui/material/Box';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -63,7 +63,7 @@ export default function Note({ note, onDelete }) {
             <Grid item sx={{ flexGrow: 1 }}>
               <Box sx={{ backgroundColor: '#6698FF', borderRadius: 5, display: 'inline-block', padding: '2px 8px', marginRight: '8px' }}>
                 <Typography variant="subtitle2" color="white">
-                  {getCategoryLabel(note.category)}
+                  {note.category === "None" ? "None" : getCategoryLabel(note.category)}
                 </Typography>
               </Box>
             </Grid>

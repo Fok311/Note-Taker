@@ -1,10 +1,8 @@
 
-import AddNoteDialog from '../AddNote';
-import { useEffect, useState } from 'react';
 import Note from '../Note';
-import Container from "@mui/material/Container";
 import AppBars from '../../components/AppBar';
 import { useLocation } from 'react-router-dom';
+import { Card, CardContent, Typography, Container} from "@mui/material";
 
 export default function Home() {
     const stringNotes = localStorage.getItem("notes");
@@ -42,6 +40,13 @@ export default function Home() {
                         <Note key={index} note={note} onDelete={() => handleDeleteNote(note.id)} onEdit={handleEditNote}/>
                     ))}
                 </div>
+                {notes.length === 0 && (
+                    <Card style={{ textAlign: 'center' }}>
+                        <CardContent>
+                            <Typography variant="h6">No Note added yet.</Typography>
+                        </CardContent>
+                    </Card>
+            )}
             </Container>
         </>
     );

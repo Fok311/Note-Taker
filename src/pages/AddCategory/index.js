@@ -33,6 +33,11 @@ export default function AddCategory() {
   const [newItem, setNewItem] = useState("");
   const [openDialog, setOpenDialog] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
+  const [editItemId, setEditItemId] = useState(null);
+  const [editedItem, setEditedItem] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
+
+  const maxChars = 20;
 
   // Function to handle adding a new category
   const handleAddNewItem = () => {
@@ -70,6 +75,31 @@ export default function AddCategory() {
     setOpenDialog(false);
   };
 
+  const handleEditClick = (categoryId) => {
+    setEditItemId(categoryId);
+    const itemToEdit = categories.find(category => category.id === categoryId);
+    setEditedItem(itemToEdit.label);
+  };
+
+  const handleEditChange = (event) => {
+    setEditedItem(event.target.value);
+  };
+
+  const handleSaveEdit = () => {
+    const updatedCategories = categories.map(category => {
+      if (category.id === editItemId) {
+        return {
+          ...category,
+          label: editedItem
+        };
+      }
+      return category;
+    });
+    categories = updatedCategories; // Update categories directly without state
+    localStorage.setItem("category", JSON.stringify(updatedCategories));
+    setEditItemId(null);
+  };
+
   return (
     <div>
       <AppBars />
@@ -80,11 +110,41 @@ export default function AddCategory() {
               Categories
             </Typography>
             <List>
-              {categories.map((category) => (
+            {categories.map((category) => (
                 <ListItem key={category.id}>
-                  <ListItemText primary={category.label} />
-                  <IconButton edge="start" aria-label="edit" style={{ backgroundColor: '#C68E17' , borderRadius: '10px', marginRight: '4px', color: 'white' }}>
-                    <EditIcon />
+                  {editItemId === category.id ? (
+                    <TextField
+                    fullWidth
+                    autoFocus
+                      value={editedItem}
+                    onChange={handleEditChange}
+                    onKeyDown={(event) => {
+                      if (event.key === 'Enter') {
+                        handleSaveEdit();
+                      }
+                    }}
+                    onBlur={handleSaveEdit}
+                    inputProps={{ maxLength : 20 }}
+                    InputProps={{
+                      endAdornment: (
+                        <Typography variant="body2" color="gray">
+                          {maxChars - editedItem.length} characters left
+                        </Typography>
+                      )
+                    }}
+                    error={editedItem.length === maxChars}
+                    helperText={editedItem.length === maxChars ? "Reached character limit" : ""}
+                    />
+                  ) : (
+                    <ListItemText primary={category.label} />
+                  )}
+                  <IconButton 
+                    edge="start" 
+                    aria-label="edit" 
+                    style={{ backgroundColor: '#C68E17' , borderRadius: '10px',marginLeft:'5px', marginRight: '4px', color: 'white' }}
+                    onClick={() => handleEditClick(category.id)}
+                >
+                  <EditIcon />
                   </IconButton>
                   <IconButton edge="end" aria-label="delete" style={{ backgroundColor: '#9F000F' , borderRadius: '10px', color: 'white'}} onClick={() => handleDeleteClick(category.id)}>
                     <DeleteIcon />
@@ -101,16 +161,28 @@ export default function AddCategory() {
                 fullWidth
                 value={newItem}
                 onChange={(event) => setNewItem(event.target.value)}
-              />
+                inputProps={{ maxLength : 20 }}
+                    InputProps={{
+                      endAdornment: isFocused && (
+                        <Typography variant="body2" color="gray">
+                          {maxChars - newItem.length} characters left
+                        </Typography>
+                      )
+                    }}
+                error={newItem.length === maxChars}
+                helperText={newItem.length === maxChars ? "Reached character limit" : ""}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+                    />
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
                 fullWidth
                 onClick={handleAddNewItem}
                 sx={{ mt: 2 }}
-                style={{ backgroundColor: newItem.length > 0 ? '#3BB9FF' : '#CCCCCC', // Blue if length > 0, Gray otherwise
+                style={{ backgroundColor: newItem.length > 0 && newItem.length <= 20 ? '#3BB9FF' : '#CCCCCC', // Blue if length > 0, Gray otherwise
                 color: '#FFFFFF' }}
-                disabled={newItem.length === 0}
+                disabled={newItem.length === 0 || newItem.length > 20}
               >
                 Add
               </Button>

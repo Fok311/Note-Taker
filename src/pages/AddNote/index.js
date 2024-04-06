@@ -6,7 +6,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, S
 export default function AddNoteDialog({ open, onClose}) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
-    const [category, setCategory] = useState("None")
+    const [category, setCategory] = useState("")
     let categories = JSON.parse(localStorage.getItem("category"));
     if (!categories) categories = [];
     const characterLimit = 100
@@ -20,11 +20,15 @@ export default function AddNoteDialog({ open, onClose}) {
 
         if (!notes) notes = []
 
+
+        const noteTitle = title.trim() === "" ? "Untitled" : title;
+        const noteCategory = category.trim() === "" ? "None" : category;
+
         notes.push({
             id: nanoid(),
-            name: title,
+            name: noteTitle,
             content: content,
-            category: category,
+            category: noteCategory,
         })
 
         let convertedNotes = JSON.stringify(notes)
