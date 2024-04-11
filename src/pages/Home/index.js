@@ -2,7 +2,7 @@ import { useState } from "react";
 import Note from '../Note';
 import AppBars from '../../components/AppBar';
 import { useLocation } from 'react-router-dom';
-import { Card, CardContent, Typography, Container } from "@mui/material";
+import { Card, CardContent, Typography, Container, Snackbar } from "@mui/material";
 
 export default function Home() {
     const stringNotes = localStorage.getItem("notes");
@@ -11,6 +11,7 @@ export default function Home() {
     const queryParams = new URLSearchParams(location.search);
     const categoryId = queryParams.get('cat');
     const [searchKeyword, setSearchKeyword] = useState("");
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const filterNotes = (notes, categoryId, keyword) => {
         let filtered = notes;
@@ -42,6 +43,11 @@ export default function Home() {
         const updatedNotes = notes.filter((note) => note.id !== id);
         setNotes(updatedNotes);
         localStorage.setItem("notes", JSON.stringify(updatedNotes));
+        setSnackbarOpen(true);
+    };
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false); // Close snackbar
     };
 
     return (
@@ -61,6 +67,13 @@ export default function Home() {
                     </Card>
                 )}
             </Container>
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={1000} // Snackbar will auto hide after 6 seconds
+                onClose={handleSnackbarClose}
+                message="Note deleted successfully"
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            />
         </>
     );
 }
