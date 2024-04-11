@@ -22,13 +22,12 @@ export default function AddNoteDialog({ open, onClose}) {
 
 
         const noteTitle = title.trim() === "" ? "Untitled" : title;
-        const noteCategory = category.trim() === "" ? "None" : category;
 
         notes.push({
             id: nanoid(),
             name: noteTitle,
             content: content,
-            category: noteCategory,
+            category: category,
         })
 
         let convertedNotes = JSON.stringify(notes)

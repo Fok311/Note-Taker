@@ -50,9 +50,9 @@ export default function Note({ note, onDelete }) {
     let categories = JSON.parse(localStorage.getItem("category"));
     if (categories) {
       const category = categories.find(cat => cat.id === Id);
-      return category ? category.label : ''; // Return the category label or an empty string if not found
+      return category ? category.label : 'None'; // Return the category label or an empty string if not found
     }
-    return '';
+    return 'None';
   };
 
   return (
