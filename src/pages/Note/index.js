@@ -5,33 +5,32 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteConfirmationDialog from '../DeleteNote';
 import { useParams } from "react-router-dom";
 import EditNoteDialog from '../EditNote';
+import EditIcon from "@mui/icons-material/Edit";
 
-export default function Note({ note, onDelete }) {
-  const [openDialog, setOpenDialog] = useState(false);
+export default function Note({ note }) {
+  // const [openDialog, setOpenDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
-  const [deleteClicked, setDeleteClicked] = useState(false);
+  // const [deleteClicked, setDeleteClicked] = useState(false);
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
-    setDeleteClicked(false);
-  };
+  // const handleCloseDialog = () => {
+  //   setOpenDialog(false);
+  //   setDeleteClicked(false);
+  // };
   
 
-  const handleDeleteClick = (e) => {
-    e.stopPropagation();
-    setOpenDialog(true);
-    setDeleteClicked(true);
-  };
+  // const handleDeleteClick = (e) => {
+  //   e.stopPropagation();
+  //   setOpenDialog(true);
+  //   setDeleteClicked(true);
+  // };
 
-  const handleConfirmDelete = () => {
-    onDelete(note.id);
-    setOpenDialog(false);
-  };
+  // const handleConfirmDelete = () => {
+  //   onDelete(note.id);
+  //   setOpenDialog(false);
+  // };
 
   const handleOpenEditDialog = () => {
-    if (!deleteClicked) { // Only open edit dialog if delete icon wasn't clicked
       setOpenEditDialog(true);
-    }
   };
 
   const handleCloseEditDialog = () => {
@@ -68,8 +67,8 @@ export default function Note({ note, onDelete }) {
               </Box>
             </Grid>
             <Grid item>
-              <IconButton onClick={handleDeleteClick}>
-                <DeleteIcon />
+              <IconButton onClick={handleOpenEditDialog}>
+                <EditIcon />
               </IconButton>
             </Grid>
           </Grid>
@@ -81,7 +80,6 @@ export default function Note({ note, onDelete }) {
           </Typography>
         </CardContent>
       </Card>
-      <DeleteConfirmationDialog open={openDialog} onClose={handleCloseDialog} onConfirm={handleConfirmDelete} note={note}  />
       <EditNoteDialog open={openEditDialog} onClose={handleCloseEditDialog} id={note.id} onSave={handleEditNote} />
     </Box>
   );

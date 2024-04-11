@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Select, MenuItem, FormControl, InputLabel, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteConfirmationDialog from '../DeleteNote';
 
-export default function EditNoteDialog({ open, onClose, id }) {
+export default function EditNoteDialog({ open, onClose, id, onDelete}) {
     const notes = JSON.parse(localStorage.getItem("notes"));
 
     const selectedNote = notes.find((p) => p.id === id);
@@ -9,9 +11,30 @@ export default function EditNoteDialog({ open, onClose, id }) {
     const [title, setTitle] = useState(selectedNote ? selectedNote.name : "");
     const [content, setContent] = useState(selectedNote ? selectedNote.content : "");
     const [category, setCategory] = useState(selectedNote ? selectedNote.category : "");
+    const [openDialog, setOpenDialog] = useState(false);
 
     let categories = JSON.parse(localStorage.getItem("category"));
     if (!categories) categories = [];
+
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+      };
+      
+    
+      const handleDeleteClick = (e) => {
+        setOpenDialog(true);
+      };
+    
+      const handleConfirmDelete = () => {
+        const updatedNotes = notes.filter((note) => note.id !== id);
+
+        localStorage.setItem("notes", JSON.stringify(updatedNotes));
+
+        onClose();
+        setOpenDialog(false);
+        window.location.reload();
+    };
 
 
     const updateNote = () => {
@@ -32,8 +55,14 @@ export default function EditNoteDialog({ open, onClose, id }) {
     };
 
     return (
+        <div>
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle style={{ fontWeight: 'bold', borderBottom: '2px solid black', marginBottom: '8px' }}>Edit Note</DialogTitle>
+            <div style={{ display: 'flex', alignItems: 'center', borderBottom: '2px solid black', justifyContent: "space-between" }}>
+            <DialogTitle style={{ fontWeight: 'bold' }}>Edit Note</DialogTitle>
+                <IconButton aria-label="delete" style={{marginBottom:"3px", marginRight:"15px", color:"#D04848"}} onClick={handleDeleteClick}>
+                    <DeleteIcon />
+                </IconButton>
+            </div>
             <DialogContent>
                 <TextField
                     margin="dense"
@@ -80,6 +109,8 @@ export default function EditNoteDialog({ open, onClose, id }) {
                     Save
                 </Button>
             </DialogActions>
-        </Dialog>
+            </Dialog>
+            <DeleteConfirmationDialog open={openDialog} onClose={handleCloseDialog} onConfirm={handleConfirmDelete} />
+        </div>
     );
 };
