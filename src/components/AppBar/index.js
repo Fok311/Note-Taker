@@ -71,13 +71,13 @@ export default function AppBars({ setKeyword }) {
 
     return (
         <>
-        <AppBar position="static" style={{ backgroundColor: '#3BB9FF' }}>
+        <AppBar position="static" style={{ backgroundColor: '#6698FF' }}>
                 <Toolbar>
                 <DensityMediumIcon onClick={toggleDrawer(true)}></DensityMediumIcon>
                 <Drawer open={open} onClose={toggleDrawer(false)}>
                     {DrawerList}
                 </Drawer>
-                <Box sx={{ marginLeft: 1 }}>
+                <Box sx={{ marginLeft: 2 }}>
                         <TextField
                             placeholder='Search your note...'
                             variant="outlined"

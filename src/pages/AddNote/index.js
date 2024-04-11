@@ -89,7 +89,7 @@ export default function AddNoteDialog({ open, onClose}) {
                     </Select>
                 </FormControl>
             </DialogContent>
-            <DialogActions>
+            <DialogActions style={{marginBottom:"10px", marginRight:"15px"}}>
                 <Button onClick={onClose} color="error" variant="contained">
                     Cancel
                 </Button>

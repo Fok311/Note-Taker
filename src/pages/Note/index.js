@@ -57,7 +57,7 @@ export default function Note({ note, onDelete }) {
 
   return (
     <Box component="span" sx={{ display: 'inline-block', margin: '10px'}}>
-      <Card sx={{ width: 350, height: '200px', borderRadius: 1, backgroundColor: '#EEEEEE' }} onClick={handleOpenEditDialog}>
+      <Card sx={{ width: 350, height: '200px', borderRadius: 3, backgroundColor: 'white', boxShadow: '3' }} onClick={handleOpenEditDialog}>
         <CardContent>
           <Grid container alignItems="center">
             <Grid item sx={{ flexGrow: 1 }}>

@@ -57,7 +57,7 @@ export default function EditNoteDialog({ open, onClose, id }) {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                 />
-                <FormControl fullWidth>
+                <FormControl fullWidth margin="dense">
                     <InputLabel id="category-label">Category</InputLabel>
                     <Select
                         labelId="category-label"
@@ -72,7 +72,7 @@ export default function EditNoteDialog({ open, onClose, id }) {
                     </Select>
                 </FormControl>
             </DialogContent>
-            <DialogActions>
+            <DialogActions style={{marginBottom: "10px", marginRight: "15px"}}>
                 <Button onClick={onClose} color="error" variant="contained">
                     Cancel
                 </Button>

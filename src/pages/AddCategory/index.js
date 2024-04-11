@@ -101,17 +101,22 @@ export default function AddCategory() {
   };
 
   return (
-    <div>
+    <div style={{height:"100vh",backgroundColor: "#EEF5FF"}}>
       <AppBars />
       <Container maxWidth="md">
-        <Card variant="outlined" sx={{ marginTop: '50px' }}>
+        <Card variant="outlined" sx={{ marginTop: '50px', borderRadius:3, padding:'10px' }}>
           <CardContent>
             <Typography variant="h5" gutterBottom>
               Categories
             </Typography>
             <List>
             {categories.map((category) => (
-                <ListItem key={category.id}>
+                <ListItem key={category.id} sx={{
+                  borderBottom: '1px solid #ccc', // Adding bottom border
+                  '&:last-child': {
+                    borderBottom: 'none' // Removing bottom border for the last item
+                  }
+                }}>
                   {editItemId === category.id ? (
                     <TextField
                     fullWidth
@@ -127,8 +132,8 @@ export default function AddCategory() {
                     inputProps={{ maxLength : 20 }}
                     InputProps={{
                       endAdornment: (
-                        <Typography variant="body2" color="gray">
-                          {maxChars - editedItem.length} characters left
+                        <Typography variant="text" color="gray" style={{ whiteSpace: 'nowrap' }}>
+                          {editedItem.length}/20
                         </Typography>
                       )
                     }}
@@ -164,8 +169,8 @@ export default function AddCategory() {
                 inputProps={{ maxLength : 20 }}
                     InputProps={{
                       endAdornment: isFocused && (
-                        <Typography variant="body2" color="gray">
-                          {maxChars - newItem.length} characters left
+                        <Typography variant="body2" color="gray" style={{ whiteSpace: 'nowrap' }}>
+                          {newItem.length}/20
                         </Typography>
                       )
                     }}
@@ -180,7 +185,7 @@ export default function AddCategory() {
                 fullWidth
                 onClick={handleAddNewItem}
                 sx={{ mt: 2 }}
-                style={{ backgroundColor: newItem.length > 0 && newItem.length <= 20 ? '#3BB9FF' : '#CCCCCC', // Blue if length > 0, Gray otherwise
+                style={{ backgroundColor: newItem.length > 0 && newItem.length <= 20 ? '#6698FF' : '#CCCCCC', // Blue if length > 0, Gray otherwise
                 color: '#FFFFFF' }}
                 disabled={newItem.length === 0 || newItem.length > 20}
               >

@@ -51,7 +51,7 @@ export default function Home() {
     };
 
     return (
-        <>
+        <div style={{height:"100vh",backgroundColor: "#EEF5FF"}}>
             <AppBars setKeyword={handleSearchKeywordChange} />
             <Container>
                 <div style={{ marginTop: '16px', padding: '0 16px' }}>
@@ -74,7 +74,7 @@ export default function Home() {
                 message="Note deleted successfully"
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             />
-        </>
+        </div>
     );
 }
 
