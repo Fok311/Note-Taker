@@ -21,7 +21,7 @@ export default function Home() {
         }
         if (keyword) {
             filtered = filtered.filter(note =>
-                (note.title && note.title.toLowerCase().includes(keyword.toLowerCase())) ||
+                (note.name && note.name.toLowerCase().includes(keyword.toLowerCase())) ||
                 (note.content && note.content.toLowerCase().includes(keyword.toLowerCase()))
             );
         }
