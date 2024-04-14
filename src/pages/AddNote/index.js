@@ -1,15 +1,20 @@
 import { nanoid } from "nanoid";
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions,Typography, Button, TextField, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 
 
-export default function AddNoteDialog({ open, onClose}) {
+export default function AddNoteDialog({ open, onClose, refresh}) {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [category, setCategory] = useState("")
+    const [isFocused, setIsFocused] = useState(false);
+    const [isFocus, setIsFocus] = useState(false);
     let categories = JSON.parse(localStorage.getItem("category"));
     if (!categories) categories = [];
-    const characterLimit = 100
+
+    const maxChars = 90;
+
+    const maxChar = 20;
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -34,7 +39,7 @@ export default function AddNoteDialog({ open, onClose}) {
         localStorage.setItem("notes", convertedNotes)
 
         onClose()
-        window.location.reload();
+        refresh("Add note Successfully")
 
         setTitle("");
         setContent("");
@@ -57,6 +62,18 @@ export default function AddNoteDialog({ open, onClose}) {
                     name="title"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
+                    inputProps={{ maxLength : 20 }}
+                    InputProps={{
+                            endAdornment: isFocus && (
+                              <Typography variant="text" color="gray" style={{ whiteSpace: 'nowrap' }}>
+                                {title.length}/20
+                              </Typography>
+                            )
+                          }}
+                    error={title.length === maxChar}
+                    helperText={title.length === maxChar ? "Reached character limit" : ""}
+                    onFocus={() => setIsFocus(true)}
+                    onBlur={() => setIsFocus(false)}
                 />
                 <TextField
                     margin="dense"
@@ -68,10 +85,19 @@ export default function AddNoteDialog({ open, onClose}) {
                     rows={4}
                     name="content"
                     value={content}
-                    inputProps={{ maxLength : 101 }}
                     onChange={(e) => setContent(e.target.value)}
-                    helperText={content.length > characterLimit ? "Exceeded character limit!" : `${characterLimit - content.length} Remaining`}
-                    error={content.length > characterLimit}
+                    inputProps={{ maxLength : 90 }}
+                    InputProps={{
+                            endAdornment: isFocused && (
+                              <Typography variant="text" color="gray" style={{ whiteSpace: 'nowrap' }}>
+                                {content.length}/90
+                              </Typography>
+                            )
+                          }}
+                    error={content.length === maxChars}
+                    helperText={content.length === maxChars ? "Reached character limit" : ""}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                 />
                 <FormControl fullWidth>
                     <InputLabel id="category-label">Category</InputLabel>

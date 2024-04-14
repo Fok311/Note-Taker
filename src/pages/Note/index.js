@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import EditNoteDialog from '../EditNote';
 import EditIcon from "@mui/icons-material/Edit";
 
-export default function Note({ note }) {
+export default function Note({ note, refresh }) {
   // const [openDialog, setOpenDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
   // const [deleteClicked, setDeleteClicked] = useState(false);
@@ -80,7 +80,7 @@ export default function Note({ note }) {
           </Typography>
         </CardContent>
       </Card>
-      <EditNoteDialog open={openEditDialog} onClose={handleCloseEditDialog} id={note.id} onSave={handleEditNote} />
+      <EditNoteDialog open={openEditDialog} onClose={handleCloseEditDialog} id={note.id} onSave={handleEditNote} refresh={refresh} />
     </Box>
   );
 }

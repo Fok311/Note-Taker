@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Note from '../Note';
 import AppBars from '../../components/AppBar';
 import { useLocation } from 'react-router-dom';
@@ -12,6 +12,7 @@ export default function Home() {
     const categoryId = queryParams.get('cat');
     const [searchKeyword, setSearchKeyword] = useState("");
     const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
 
     const filterNotes = (notes, categoryId, keyword) => {
         let filtered = notes;
@@ -31,32 +32,31 @@ export default function Home() {
         setSearchKeyword(keyword);
     };
 
-    const filteredNotes = filterNotes(notes, categoryId, searchKeyword);
+    let filteredNotes = filterNotes(notes, categoryId, searchKeyword);
 
-    const handleEditNote = (editedNote) => {
-        const updatedNotes = notes.map((note) => (note.id === editedNote.id ? editedNote : note));
-        setNotes(updatedNotes);
-        localStorage.setItem("notes", JSON.stringify(updatedNotes));
-    };
 
-    const handleDeleteNote = (id) => {
-        const updatedNotes = notes.filter((note) => note.id !== id);
-        setNotes(updatedNotes);
-        localStorage.setItem("notes", JSON.stringify(updatedNotes));
-        setSnackbarOpen(true);
-    };
 
     const handleSnackbarClose = () => {
         setSnackbarOpen(false); // Close snackbar
     };
 
+    const refresh = (message) => {
+        setNotes(JSON.parse(localStorage.getItem("notes")))
+        setSnackbarMessage(message);
+        setSnackbarOpen(true)
+    }
+
+    useEffect(() => {
+        filteredNotes = filterNotes(notes, categoryId, searchKeyword);
+    }, [notes])
+
     return (
         <div style={{height:"100vh",backgroundColor: "#EEF5FF"}}>
-            <AppBars setKeyword={handleSearchKeywordChange} />
+            <AppBars setKeyword={handleSearchKeywordChange} refresh={refresh} />
             <Container>
                 <div style={{ marginTop: '16px', padding: '0 16px' }}>
                     {filteredNotes.map((note, index) => (
-                        <Note key={index} note={note} onDelete={() => handleDeleteNote(note.id)} onEdit={handleEditNote} />
+                        <Note key={index} note={note} refresh={refresh} />
                     ))}
                 </div>
                 {filteredNotes.length === 0 && (
@@ -71,7 +71,7 @@ export default function Home() {
                 open={snackbarOpen}
                 autoHideDuration={1000} // Snackbar will auto hide after 6 seconds
                 onClose={handleSnackbarClose}
-                message="Note deleted successfully"
+                message={snackbarMessage}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
             />
         </div>

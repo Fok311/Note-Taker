@@ -13,7 +13,7 @@ import List from '@mui/material/List';
 import { Link, useNavigate} from 'react-router-dom';
 import Divider from '@mui/material/Divider';
 
-export default function AppBars({ setKeyword }) {
+export default function AppBars({ setKeyword, refresh }) {
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
@@ -112,7 +112,7 @@ export default function AppBars({ setKeyword }) {
                 </Box>
             </Toolbar>
             </AppBar>
-            <AddNoteDialog open={openDialog} onClose={handleCloseDialog} onSubmit={handleAddNote} />
+            <AddNoteDialog open={openDialog} onClose={handleCloseDialog} onSubmit={handleAddNote} refresh={refresh} />
         </>
     )
 }
