@@ -109,6 +109,9 @@ export default function AddNoteDialog({ open, onClose, refresh}) {
                         onChange={(e) => setCategory(e.target.value)}
                         required
                     >
+                        {categories.length === 0 && ( // Check if categories array is empty
+                    <MenuItem disabled>No categories available</MenuItem>
+                    )}
                         {categories.map((category) => (
                       <MenuItem value={category.id}>{category.label}</MenuItem>
                     ))}
